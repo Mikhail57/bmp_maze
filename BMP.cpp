@@ -139,3 +139,27 @@ void BMP::save(std::string filename) {
 void BMP::setPixel(int x, int y, RGBPixel &pixel) {
     pixels[x][y] = pixel;
 }
+
+int BMP::getWidth() const {
+    return infoHeader.width;
+}
+
+int BMP::getHeight() const {
+    return infoHeader.height;
+}
+
+bool operator==(const RGBPixel &p1, const RGBPixel &p2) {
+    return p1.red == p2.red && p1.green == p2.green && p1.blue == p2.blue;
+}
+
+RGBPixel::RGBPixel(uint8_t blue, uint8_t green, uint8_t red, uint8_t reserved) : blue(blue), green(green), red(red),
+                                                                                 reserved(reserved) {}
+
+RGBPixel::RGBPixel(uint8_t blue, uint8_t green, uint8_t red) : blue(blue), green(green), red(red) { reserved = 0; }
+
+RGBPixel::RGBPixel() {
+    red = 0;
+    green = 0;
+    blue = 0;
+    reserved = 0;
+}

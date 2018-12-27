@@ -16,7 +16,7 @@ class PathFinder {
 public:
     explicit PathFinder(Maze &maze);
 
-    std::vector<std::pair<int, int>> wave();
+    std::vector<Point> wave();
 };
 
 

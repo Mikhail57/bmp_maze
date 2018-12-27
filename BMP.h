@@ -31,12 +31,19 @@ typedef struct {
     uint32_t clrImportant;
 } BMPInfoHeader;
 
-typedef struct {
+class RGBPixel {
+public:
     uint8_t blue;
     uint8_t green;
     uint8_t red;
     uint8_t reserved;
-} RGBPixel;
+
+    RGBPixel(uint8_t blue, uint8_t green, uint8_t red, uint8_t reserved);
+
+    RGBPixel(uint8_t blue, uint8_t green, uint8_t red);
+
+    RGBPixel();
+};
 
 class BMP {
 private:
@@ -48,12 +55,20 @@ public:
     explicit BMP(std::string filename);
 
     RGBPixel getPixel(int x, int y);
+
     void setPixel(int x, int y, RGBPixel &pixel);
+
+    int getWidth() const;
+
+    int getHeight() const;
 
     void save(std::string filename);
 
     ~BMP();
 };
+
+
+bool operator==(const RGBPixel &p1, const RGBPixel &p2);
 
 
 #endif //BMP_MAZE_BMP_H
