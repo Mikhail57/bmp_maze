@@ -33,6 +33,10 @@ int main(int argc, char **argv) {
     blue.red = 255;
     blue.green = 0;
 
+    if (result.empty()) {
+        std::cout << "No path found...";
+    }
+
     for (auto elem : result) {
 //        std::cout << elem << std::endl;
         file.setPixel(elem.x, elem.y, blue);
