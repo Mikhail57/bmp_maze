@@ -4,17 +4,26 @@
 #include "PathFinder.h"
 #include "MazeUtils.h"
 
-int main() {
-    BMP file("dnk.bmp");
+int main(int argc, char **argv) {
+    std::string inputFilename("maze.bmp");
+    std::string outputFilename("result.bmp");
+    if (argc == 2) {
+        inputFilename = std::string(argv[1]);
+    } else if (argc == 3) {
+        inputFilename = std::string(argv[1]);
+        outputFilename = std::string(argv[2]);
+    } else if (argc > 3) {
+        std::cerr << "Wrong number of arguments.\n"
+                     "You should use this program like this: ./maze <input>.bmp <output>.bmp\n"
+                     "Input image should be 24-bit bmp image without compression and pallet";
+        exit(1);
+    }
+
+    BMP file(inputFilename);
 
     RGBPixel startColor(36, 28, 237);
     RGBPixel endColor(76, 177, 34);
     Maze maze = MazeUtils().generateMazeFromBmp(file, startColor, endColor);
-
-//    Point start = Point(135, 687);
-//    Point end = Point(1254, 523);
-//    maze.setStartPoint(start);
-//    maze.setEndPoint(end);
 
     PathFinder pathFinder(maze);
 
@@ -24,15 +33,11 @@ int main() {
     blue.red = 255;
     blue.green = 0;
 
-//    file.setPixel(file.getWidth() - 1, file.getHeight() - 1, blue);
-//    for (int i = 0; i < file.getHeight(); i++) {
-//        file.setPixel(file.getWidth() - 1, i, blue);
-//    }
     for (auto elem : result) {
-        std::cout << elem << std::endl;
+//        std::cout << elem << std::endl;
         file.setPixel(elem.x, elem.y, blue);
     }
 
-    file.save("lol.bmp");
+    file.save(outputFilename);
     return 0;
 }
