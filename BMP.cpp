@@ -68,17 +68,20 @@ BMP::BMP(std::string filename) {
 
     pixels = new RGBPixel *[infoHeader.width];
 
-    for (int i = 0; i < infoHeader.width; i++) {
-        pixels[i] = new RGBPixel[infoHeader.height];
+    for (int i = 0; i < infoHeader.height; i++) {
+        pixels[i] = new RGBPixel[infoHeader.width];
     }
 
+    int linePadding = ((infoHeader.width * (infoHeader.bitCount / 8)) % 4) & 3;
+
     std::cout << "Reading file..." << std::endl;
-    for (int i = 0; i < infoHeader.width; i++) {
-        for (int j = 0; j < infoHeader.height; j++) {
-            pixels[i][j].blue = read_u8(file);
-            pixels[i][j].green = read_u8(file);
-            pixels[i][j].red = read_u8(file);
+    for (int y = infoHeader.height - 1; y >= 0 ; y--) {
+        for (int x = 0; x < infoHeader.width; x++) {
+            pixels[y][x].blue = read_u8(file);
+            pixels[y][x].green = read_u8(file);
+            pixels[y][x].red = read_u8(file);
         }
+        file.seekg(linePadding, std::ios_base::cur);
     }
 
     std::cout << "Reading complete" << std::endl;
@@ -94,7 +97,7 @@ BMP::~BMP() {
 }
 
 RGBPixel BMP::getPixel(int x, int y) {
-    return pixels[x][y];
+    return pixels[y][x];
 }
 
 void BMP::save(std::string filename) {
@@ -118,18 +121,18 @@ void BMP::save(std::string filename) {
     write(file, infoHeader.clrUsed);
     write(file, infoHeader.clrImportant);
 
-    for (int x = 0; x < infoHeader.width; x++) {
-        for (int y = 0; y < infoHeader.height; y++) {
+    int linePadding = ((infoHeader.width * (infoHeader.bitCount / 8)) % 4) & 3;
 
-            RGBPixel &pixel = pixels[x][y];
-            if (pixel.red == 0 && pixel.green == 0 && pixel.blue == 0) {
-                pixel.blue = 200;
-            }
+    for (int y = infoHeader.height - 1; y >= 0 ; y--) {
+        for (int x = 0; x < infoHeader.width; x++) {
+
+            RGBPixel &pixel = pixels[y][x];
             write<uint8_t>(file, pixel.blue);
             write<uint8_t>(file, pixel.green);
             write<uint8_t>(file, pixel.red);
 //            write(file, pixels[x][y].reserved);
         }
+//        file.seekp(linePadding, std::ios_base::cur);
 //        write(file, (uint8_t) 0);
     }
 
@@ -137,7 +140,7 @@ void BMP::save(std::string filename) {
 }
 
 void BMP::setPixel(int x, int y, RGBPixel &pixel) {
-    pixels[x][y] = pixel;
+    pixels[y][x] = pixel;
 }
 
 int BMP::getWidth() const {

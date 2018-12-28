@@ -30,13 +30,13 @@ std::vector<Point> PathFinder::wave() {
         if (maze[p].visited)
             continue;
 
+        maze[p].visited = true;
+        maze[p].value = d;
+
         if (p == end) {
             found = true;
             break;
         }
-
-        maze[p].visited = true;
-        maze[p].value = d;
 
         Point pUp(p.x, p.y - 1);
         Point pDown(p.x, p.y + 1);
@@ -59,7 +59,7 @@ std::vector<Point> PathFinder::wave() {
     result.push_back(end);
 
     Point p;
-    while (p != start) {
+    do {
         p = result.back();
 
         Point pUp(p.x, p.y - 1);
@@ -67,23 +67,23 @@ std::vector<Point> PathFinder::wave() {
         Point pLeft(p.x - 1, p.y);
         Point pRight(p.x + 1, p.y);
 
-        if (maze[pUp].value == maze[p].value - 1) {
+        if (maze.isValidPoint(pUp) && maze[pUp].value == maze[p].value - 1) {
             result.push_back(pUp);
             continue;
         }
-        if (maze[pDown].value == maze[p].value - 1) {
+        if (maze.isValidPoint(pDown) && maze[pDown].value == maze[p].value - 1) {
             result.push_back(pDown);
             continue;
         }
-        if (maze[pLeft].value == maze[p].value - 1) {
+        if (maze.isValidPoint(pLeft) && maze[pLeft].value == maze[p].value - 1) {
             result.push_back(pLeft);
             continue;
         }
-        if (maze[pRight].value == maze[p].value - 1) {
+        if (maze.isValidPoint(pRight) && maze[pRight].value == maze[p].value - 1) {
             result.push_back(pRight);
             continue;
         }
-    }
+    } while (p != start);
 
     return result;
 }

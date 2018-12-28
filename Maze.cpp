@@ -41,7 +41,7 @@ int Maze::getHeight() const {
 }
 
 bool Maze::isValidPoint(const Point &p) {
-    return (p.x > 0 && p.x < width && p.y > 0 && p.y < height);
+    return (p.x >= 0 && p.x < width && p.y >= 0 && p.y < height);
 }
 
 Cell &Maze::operator[](const Point index) {
