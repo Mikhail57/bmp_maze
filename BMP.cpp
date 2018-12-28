@@ -72,16 +72,19 @@ BMP::BMP(std::string filename) {
         pixels[i] = new RGBPixel[infoHeader.width];
     }
 
-    int linePadding = ((infoHeader.width * (infoHeader.bitCount / 8)) % 4) & 3;
+    int lineWidth = (3 * infoHeader.width + 3) & (-4);
+    int diff = lineWidth - infoHeader.width * 3;
+//    std::cout << "lineWidth:" << lineWidth << std::endl;
+//    std::cout << "diff:" << diff << std::endl;
 
     std::cout << "Reading file..." << std::endl;
-    for (int y = infoHeader.height - 1; y >= 0 ; y--) {
+    for (int y = infoHeader.height - 1; y >= 0; y--) {
         for (int x = 0; x < infoHeader.width; x++) {
             pixels[y][x].blue = read_u8(file);
             pixels[y][x].green = read_u8(file);
             pixels[y][x].red = read_u8(file);
         }
-        file.seekg(linePadding, std::ios_base::cur);
+        file.seekg(diff, std::ios_base::cur);
     }
 
     std::cout << "Reading complete" << std::endl;
@@ -121,9 +124,13 @@ void BMP::save(std::string filename) {
     write(file, infoHeader.clrUsed);
     write(file, infoHeader.clrImportant);
 
-    int linePadding = ((infoHeader.width * (infoHeader.bitCount / 8)) % 4) & 3;
+    int lineWidth = (3 * infoHeader.width + 3) & (-4);
+    int diff = lineWidth - infoHeader.width * 3;
+//    std::cout << "lineWidth:" << lineWidth << std::endl;
+//    std::cout << "diff:" << diff << std::endl;
 
-    for (int y = infoHeader.height - 1; y >= 0 ; y--) {
+
+    for (int y = infoHeader.height - 1; y >= 0; y--) {
         for (int x = 0; x < infoHeader.width; x++) {
 
             RGBPixel &pixel = pixels[y][x];
@@ -132,8 +139,11 @@ void BMP::save(std::string filename) {
             write<uint8_t>(file, pixel.red);
 //            write(file, pixels[x][y].reserved);
         }
-//        file.seekp(linePadding, std::ios_base::cur);
-//        write(file, (uint8_t) 0);
+        file.seekp(diff, std::ios_base::cur);
+    }
+    // TODO: fix this terrible appending to the end of file
+    for (int i = 0; i < diff; i++) {
+        write(file, (uint8_t)0);
     }
 
     file.close();
