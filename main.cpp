@@ -23,11 +23,11 @@ int main(int argc, char **argv) {
 
     RGBPixel startColor(36, 28, 237);
     RGBPixel endColor(76, 177, 34);
-    Maze maze = MazeUtils().generateMazeFromBmp(file, startColor, endColor);
+    MazeWithPoints maze = MazeUtils().generateMazeFromBmp(file, startColor, endColor);
 
     PathFinder pathFinder(maze);
 
-    std::vector<Point> result = pathFinder.wave();
+    std::vector<Point> result = pathFinder.wave(maze.getEnterPoints()[0], maze.getExitPoints()[0]);
     RGBPixel blue;
     blue.blue = 255;
     blue.red = 255;

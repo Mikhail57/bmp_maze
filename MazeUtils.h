@@ -8,10 +8,11 @@
 
 #include "Maze.h"
 #include "BMP.h"
+#include "MazeWithPoints.h"
 
 class MazeUtils {
 public:
-    Maze & generateMazeFromBmp(BMP &bmp, RGBPixel &startColor, RGBPixel &endColor);
+    MazeWithPoints & generateMazeFromBmp(BMP &bmp, RGBPixel &startColor, RGBPixel &endColor);
 };
 
 

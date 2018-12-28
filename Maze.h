@@ -5,7 +5,7 @@
 #ifndef BMP_MAZE_MAZE_H
 #define BMP_MAZE_MAZE_H
 
-#include <ostream>
+#include "Geometry.h"
 
 class Cell {
 public:
@@ -19,30 +19,11 @@ public:
     Cell(short value, bool visited);
 };
 
-class Point {
-public:
-    int x;
-    int y;
-
-    Point(int x, int y);
-
-    Point();
-
-    friend std::ostream &operator<<(std::ostream &os, const Point &point);
-
-    bool operator==(const Point &rhs) const;
-
-    bool operator!=(const Point &rhs) const;
-};
-
 class Maze {
 private:
     Cell **array;
     int width;
     int height;
-
-    Point start;
-    Point end;
 
     bool isValidPoint(const Point &p);
 
@@ -52,16 +33,6 @@ public:
     Cell *operator[](int index);
 
     Cell &operator[](const Point index);
-
-
-    void setStartPoint(Point &start);
-
-    void setEndPoint(Point &end);
-
-
-    const Point &getStartPoint() const;
-
-    const Point &getEndPoint() const;
 
     int getWidth() const;
 

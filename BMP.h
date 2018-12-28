@@ -8,6 +8,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include "Geometry.h"
 
 typedef struct {
     uint16_t type;
@@ -43,6 +44,10 @@ public:
     RGBPixel(uint8_t blue, uint8_t green, uint8_t red);
 
     RGBPixel();
+
+    bool operator==(const RGBPixel &rhs) const;
+
+    bool operator!=(const RGBPixel &rhs) const;
 };
 
 class BMP {
@@ -54,6 +59,8 @@ private:
 public:
     explicit BMP(std::string filename);
 
+    BMP(BMP &other);
+
     RGBPixel getPixel(int x, int y);
 
     void setPixel(int x, int y, RGBPixel &pixel);
@@ -64,11 +71,10 @@ public:
 
     void save(std::string filename);
 
+    RGBPixel operator[](const Point &p);
+
     ~BMP();
 };
-
-
-bool operator==(const RGBPixel &p1, const RGBPixel &p2);
 
 
 #endif //BMP_MAZE_BMP_H

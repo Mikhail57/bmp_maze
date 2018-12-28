@@ -10,13 +10,14 @@
 #include <utility>
 #include <queue>
 #include "Maze.h"
+#include "Geometry.h"
 
 class PathFinder {
     Maze maze;
 public:
     explicit PathFinder(Maze &maze);
 
-    std::vector<Point> wave();
+    std::vector<Point> wave(const Point &startPoint, const Point &endPoint);
 };
 
 

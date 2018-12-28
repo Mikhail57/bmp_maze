@@ -66,7 +66,7 @@ BMP::BMP(std::string filename) {
     std::cout << "Size: " << infoHeader.width << "x" << infoHeader.height << std::endl;
     std::cout.flush();
 
-    pixels = new RGBPixel *[infoHeader.width];
+    pixels = new RGBPixel *[infoHeader.height];
 
     for (int i = 0; i < infoHeader.height; i++) {
         pixels[i] = new RGBPixel[infoHeader.width];
@@ -161,8 +161,22 @@ int BMP::getHeight() const {
     return infoHeader.height;
 }
 
-bool operator==(const RGBPixel &p1, const RGBPixel &p2) {
-    return p1.red == p2.red && p1.green == p2.green && p1.blue == p2.blue;
+RGBPixel BMP::operator[](const Point &p) {
+    return getPixel(p.x, p.y);
+}
+
+BMP::BMP(BMP &other) {
+    fileHeader = other.fileHeader;
+    infoHeader = other.infoHeader;
+
+    pixels = new RGBPixel *[infoHeader.height];
+
+    for (int y = 0; y < infoHeader.height; y++) {
+        pixels[y] = new RGBPixel[infoHeader.width];
+        for (int x = 0; x < infoHeader.width; x++) {
+            pixels[y][x] = other.pixels[y][x];
+        }
+    }
 }
 
 RGBPixel::RGBPixel(uint8_t blue, uint8_t green, uint8_t red, uint8_t reserved) : blue(blue), green(green), red(red),
@@ -175,4 +189,14 @@ RGBPixel::RGBPixel() {
     green = 0;
     blue = 0;
     reserved = 0;
+}
+
+bool RGBPixel::operator==(const RGBPixel &rhs) const {
+    return blue == rhs.blue &&
+           green == rhs.green &&
+           red == rhs.red;
+}
+
+bool RGBPixel::operator!=(const RGBPixel &rhs) const {
+    return !(rhs == *this);
 }

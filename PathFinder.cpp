@@ -6,11 +6,11 @@
 
 PathFinder::PathFinder(Maze &maze) : maze(maze) {}
 
-std::vector<Point> PathFinder::wave() {
+std::vector<Point> PathFinder::wave(const Point &startPoint, const Point &endPoint) {
     std::queue<std::pair<Point, short>> toVisit;
 
-    Point start = maze.getStartPoint();
-    Point end = maze.getEndPoint();
+    Point start = startPoint;
+    Point end = endPoint;
 
     toVisit.push(std::pair<Point, short>(start, 0));
 
