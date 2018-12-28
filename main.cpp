@@ -7,12 +7,14 @@
 int main() {
     BMP file("dnk.bmp");
 
-    Maze maze = MazeUtils().generateMazeFromBmp(file);
+    RGBPixel startColor(36, 28, 237);
+    RGBPixel endColor(76, 177, 34);
+    Maze maze = MazeUtils().generateMazeFromBmp(file, startColor, endColor);
 
-    Point start = Point(135, 687);
-    Point end = Point(1254, 523);
-    maze.setStartPoint(start);
-    maze.setEndPoint(end);
+//    Point start = Point(135, 687);
+//    Point end = Point(1254, 523);
+//    maze.setStartPoint(start);
+//    maze.setEndPoint(end);
 
     PathFinder pathFinder(maze);
 

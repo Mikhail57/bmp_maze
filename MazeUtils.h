@@ -11,7 +11,7 @@
 
 class MazeUtils {
 public:
-    Maze generateMazeFromBmp(BMP &bmp);
+    Maze & generateMazeFromBmp(BMP &bmp, RGBPixel &startColor, RGBPixel &endColor);
 };
 
 
