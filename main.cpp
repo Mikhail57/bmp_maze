@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
     long shortestResult = 0;
     for (int i = 1; i < results.size(); i++) {
-        if (results[i].size() < results[shortestResult].size()) {
+        if (results[i].size() < results[shortestResult].size() && results[i].size() != 0) {
             shortestResult = i;
         }
     }
