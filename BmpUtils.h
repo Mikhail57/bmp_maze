@@ -6,6 +6,7 @@
 #define BMP_MAZE_BMPUTILS_H
 
 #include <queue>
+#include <set>
 
 #include "Geometry.h"
 #include "BMP.h"

@@ -4,7 +4,7 @@
 
 #include "MazeUtils.h"
 
-MazeWithPoints & MazeUtils::generateMazeFromBmp(BMP &bmp, RGBPixel &startColor, RGBPixel &endColor) {
+MazeWithPoints * MazeUtils::generateMazeFromBmp(BMP &bmp, RGBPixel &startColor, RGBPixel &endColor) {
     Cell **arr;
     arr = new Cell *[bmp.getWidth()];
     for (int i = 0, end = bmp.getWidth(), s = bmp.getHeight(); i < end; i++) {
@@ -16,8 +16,8 @@ MazeWithPoints & MazeUtils::generateMazeFromBmp(BMP &bmp, RGBPixel &startColor, 
     black.green = 0;
     black.blue = 0;
 
-    std::vector<Point> startColorPoints;
-    std::vector<Point> endColorPoints;
+    std::set<Rect> starts;
+    std::set<Rect> ends;
 
     for (int x = 0, endX = bmp.getWidth(); x < endX; x++) {
         for (int y = 0, endY = bmp.getHeight(); y < endY; y++) {
@@ -29,16 +29,61 @@ MazeWithPoints & MazeUtils::generateMazeFromBmp(BMP &bmp, RGBPixel &startColor, 
                 arr[x][y].value = 0;
                 arr[x][y].visited = false;
                 if (pixel == startColor) {
-                    startColorPoints.emplace_back(x, y);
+                    bool shouldSearch = true;
+                    for (auto rect : starts) {
+                        if (x >= rect.getTopLeft().x && x <= rect.getBottomRight().x &&
+                            y >= rect.getTopLeft().y && y <= rect.getBottomRight().y) {
+                            shouldSearch = false;
+                            break;
+                        }
+                    }
+                    if (shouldSearch) {
+                        Point point(x, y);
+                        Rect rect = BmpUtils().getEnclosingRect(bmp, point);
+                        starts.insert(rect);
+                    }
                 } else if (pixel == endColor) {
-                    endColorPoints.emplace_back(x, y);
+                    bool shouldSearch = true;
+                    for (auto rect : starts) {
+                        if (x >= rect.getTopLeft().x && x <= rect.getBottomRight().x &&
+                            y >= rect.getTopLeft().y && y <= rect.getBottomRight().y) {
+                            shouldSearch = false;
+                            break;
+                        }
+                    }
+                    if (shouldSearch) {
+                        Point point(x, y);
+                        Rect rect = BmpUtils().getEnclosingRect(bmp, point);
+                        ends.insert(rect);
+                    }
                 }
             }
         }
     }
 
+    MazeWithPoints *maze = new MazeWithPoints(arr, bmp.getWidth(), bmp.getHeight());
+    for (auto rect : starts) {
+        std::cout << rect << std::endl;
+        Point tl = rect.getTopLeft();
+        Point br = rect.getBottomRight();
 
+        int x = (tl.x + br.x) / 2;
+        int y = (tl.y + br.y) / 2;
 
-    MazeWithPoints maze(arr, bmp.getWidth(), bmp.getHeight());
+        Point point = Point(x, y);
+        maze->addEnterPoint(point);
+    }
+    for (auto rect : ends) {
+        std::cout << rect << std::endl;
+        Point tl = rect.getTopLeft();
+        Point br = rect.getBottomRight();
+
+        int x = (tl.x + br.x) / 2;
+        int y = (tl.y + br.y) / 2;
+
+        Point point = Point(x, y);
+        maze->addExitPoint(point);
+    }
+
     return maze;
 }

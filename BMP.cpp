@@ -93,7 +93,7 @@ BMP::BMP(std::string filename) {
 }
 
 BMP::~BMP() {
-    for (int i = 0; i < infoHeader.width; i++) {
+    for (int i = 0; i < infoHeader.height; i++) {
         delete[] pixels[i];
     }
     delete[] pixels;
@@ -199,4 +199,9 @@ bool RGBPixel::operator==(const RGBPixel &rhs) const {
 
 bool RGBPixel::operator!=(const RGBPixel &rhs) const {
     return !(rhs == *this);
+}
+
+std::ostream &operator<<(std::ostream &os, const RGBPixel &pixel) {
+    os << "Pixel(blue: " << pixel.blue << " green: " << pixel.green << " red: " << pixel.red << ")";
+    return os;
 }

@@ -48,6 +48,8 @@ public:
     bool operator==(const RGBPixel &rhs) const;
 
     bool operator!=(const RGBPixel &rhs) const;
+
+    friend std::ostream &operator<<(std::ostream &os, const RGBPixel &pixel);
 };
 
 class BMP {

@@ -5,14 +5,17 @@
 #ifndef BMP_MAZE_MAZEUTILS_H
 #define BMP_MAZE_MAZEUTILS_H
 
+#include <queue>
+#include <set>
 
-#include "Maze.h"
+//#include "Maze.h"
 #include "BMP.h"
+#include "BmpUtils.h"
 #include "MazeWithPoints.h"
 
 class MazeUtils {
 public:
-    MazeWithPoints & generateMazeFromBmp(BMP &bmp, RGBPixel &startColor, RGBPixel &endColor);
+    MazeWithPoints * generateMazeFromBmp(BMP &bmp, RGBPixel &startColor, RGBPixel &endColor);
 };
 
 
